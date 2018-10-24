@@ -10,91 +10,48 @@ using namespace std;
 
 //GPS Location from the global planner - file reading is giving error in ROS hence use as inline.
 double gps_map[][2] = {
-{12.35818,76.59616
-},{12.35818,76.59613
-},{12.35819,76.59611
-},{12.35819,76.59612
-},{12.35819,76.59615
-},{12.35819,76.59618
-},{12.35819,76.59621
-},{12.35820,76.59623
-},{12.35820,76.59622
-},{12.35820,76.59619
-},{12.35820,76.59616
-},{12.35820,76.59613
-},{12.35821,76.59611
-},{12.35821,76.59612
-},{12.35821,76.59615
-},{12.35821,76.59618
-},{12.35821,76.59621
-},{12.35822,76.59623
-},{12.35822,76.59622
-},{12.35822,76.59619
-},{12.35822,76.59616
-},{12.35822,76.59613
-},{12.35823,76.59611
-},{12.35823,76.59612
-},{12.35823,76.59615
-},{12.35823,76.59618
-},{12.35823,76.59621
-},{12.35824,76.59623
-},{12.35824,76.59622
-},{12.35824,76.59619
-},{12.35824,76.59616
-},{12.35824,76.59613
-},{12.35825,76.59611
-},{12.35825,76.59612
-},{12.35825,76.59615
-},{12.35825,76.59618
-},{12.35826,76.59611
-},{12.35826,76.59612
-},{12.35826,76.59615
-},{12.35827,76.59611}
-};
+{1,0
+},{1,1
+},{1,2
+},{1,3
+},{1,4
+},{1,5
+},{2,5
+},{2,4
+},{2,3
+},{2,2
+},{2,1
+},{2,0
+},{3,0
+},{3,1
+},{3,2
+},{3,3
+},{3,4
+},{3,5
+}};
 
 //Fake curr Data - This array will be removed.
 double curr_poss_fake_array[][2] = {
-{10.35818,76.59616
-},{12.35818,76.59613
-},{12.35819,76.59611
-},{12.35819,76.59612
-},{12.35819,76.59615
-},{12.35819,76.59618
-},{12.35819,76.59621
-},{12.35820,76.59623
-},{12.35820,76.59622
-},{12.35820,76.59619
-},{12.35820,76.59616
-},{12.35820,76.59613
-},{12.35821,76.59611
-},{12.35821,76.59612
-},{12.35821,76.59615
-},{12.35821,76.59618
-},{12.35821,76.59621
-},{12.35822,76.59623
-},{12.35822,76.59622
-},{12.35822,76.59619
-},{12.35822,76.59616
-},{12.35822,76.59613
-},{12.35823,76.59611
-},{12.35823,76.59612
-},{12.35823,76.59615
-},{12.35823,76.59618
-},{12.35823,76.59621
-},{12.35824,76.59623
-},{12.35824,76.59622
-},{12.35824,76.59619
-},{12.35824,76.59616
-},{12.35824,76.59613
-},{12.35825,76.59611
-},{12.35825,76.59612
-},{12.35825,76.59615
-},{12.35825,76.59618
-},{12.35826,76.59611
-},{12.35826,76.59612
-},{12.35826,76.59615
-},{12.35827,76.59611}
-};
+{1.1,0
+},{1,1
+},{1,2
+},{1,3
+},{1,4
+},{1,5
+},{2,5
+},{2,4
+},{2,3
+},{2,2
+},{2,1
+},{2,0
+},{3,0
+},{3,1
+},{3,2
+},{3,3
+},{3,4
+},{3,5
+}};
+
 //Number of points in Global Planner.
 const int len_of_points = sizeof(gps_map)/sizeof(gps_map[0]);
 
@@ -240,8 +197,8 @@ double get_angle(){
 int do_path_set(){
     make_follow_path(); // this will add theta values to the set of lat and lon received from global planner
     make_lines(); // this will fill the 3d array set_of_lines with x,y coordinate pairs of the line SEGMENT.
-    cout<<"NUM OF POINTS "<<len_of_points<<'\n';
-    cout<<"LINE NUMER COUTNER "<<line_counter<<'\n';
+    //cout<<"NUM OF POINTS "<<len_of_points<<'\n';
+    //cout<<"LINE NUMER COUTNER "<<line_counter<<'\n';
 }
 //PID for postion
 PID pid_p;
@@ -320,7 +277,7 @@ double* do_pid(double position_x,double position_y)
     double dist_from_end_of_line = fabs(vehicle_pos[0]-set_of_lines[i][1][0])+fabs(vehicle_pos[1]-set_of_lines[i][1][1]);
     double min_dis_ep = 0.00001; // to-do tune the value
     if(dist_from_end_of_line<min_dis_ep){
-        cout<<"debug"<<"\n";
+        //cout<<"Line change"<<"\n";
         //init_pid();
         i++;
     }
@@ -357,17 +314,17 @@ double* do_pid(double position_x,double position_y)
 
 
     //TO-DO ROS PUBLISH DESIRED VELOCITY
-    cout<<"vel_lin "<<vel_lin[0] <<", "<<vel_lin[1]<<"\n";
-    cout<<"CTE "<<cte<<'\n';
-    cout<<"Current Point "<<vehicle_pos[0]<<", "<<vehicle_pos[1]<<'\n';
-    cout<<"Current Line slope "<<curr_line_slope<<'\n';
-    cout<<"Difference in Angle "<<angle_diff<<'\n';
-    cout<<"Curr Line Number "<<i<<" End pt "<<set_of_lines[i][0][0]<<", "<<set_of_lines[i][0][1]<<'\n';
-    cout<<"Curr Dist "<<" from end of line no. "<<i<<" = "<<dist_from_end_of_line<<'\n';
-    cout<<"Position PID  "<<total_error_in_position<<'\n';
-    cout<<"Angle PID  "<<total_error_in_angle<<'\n';
-    cout<<"Total PID  "<<total_error_pid<<'\n';
-    cout<<"Desired velocity  "<<desired_vel_w[0] <<", "<<desired_vel_w[1]<<"\n";
+    //cout<<"vel_lin "<<vel_lin[0] <<", "<<vel_lin[1]<<"\n";
+    //cout<<"CTE "<<cte<<'\n';
+    //cout<<"Current Point "<<vehicle_pos[0]<<", "<<vehicle_pos[1]<<'\n';
+    //cout<<"Current Line slope "<<curr_line_slope<<'\n';
+    //cout<<"Difference in Angle "<<angle_diff<<'\n';
+    //cout<<"Curr Line Number "<<i<<" End pt "<<set_of_lines[i][0][0]<<", "<<set_of_lines[i][0][1]<<'\n';
+    //cout<<"Curr Dist "<<" from end of line no. "<<i<<" = "<<dist_from_end_of_line<<'\n';
+    //cout<<"Position PID  "<<total_error_in_position<<'\n';
+    //cout<<"Angle PID  "<<total_error_in_angle<<'\n';
+    //cout<<"Total PID  "<<total_error_pid<<'\n';
+    //cout<<"Desired velocity  "<<desired_vel_w[0] <<", "<<desired_vel_w[1]<<"\n";
 
     static double ret_val_vel[2]; // array [ right vel , left vel ]
     ret_val_vel[0]=desired_vel_w[0];
